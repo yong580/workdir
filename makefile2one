@@ -1,0 +1,18 @@
+#此makefile用于将一个标准的项目生成单独一个可执行文件，后续需要添加自动寻找头文
+#件依赖，并且添加关于库调用方面的命令
+src=$(wildcard ./src/*.c)
+obj=$(patsubst ./src/%.c,./obj/%.o, $(src))
+ALL:a.out
+args= -Wall -g
+inc_path=./inc
+a.out:$(obj)
+	gcc $^ -o $@ $(args)
+#模式规则依次进行生成，此处生成所有的.o
+#$<表示取出obj变量中的一个
+$(obj):./obj/%.o:./src/%.c
+	gcc -c $< -o  $@ $(args) -I $(inc_path)
+clean:
+	-rm -rf $(obj) *.out
+
+.PHONY:clean ALL
+
